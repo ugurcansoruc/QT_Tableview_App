@@ -69,8 +69,9 @@ void MainWindow::createView()
     // Tabloda sıralama etkinleştirilir
     tableView->setSortingEnabled(true);
 
-    // Maaş sütununda renklendirme için yeni bir delegate atanır
-    tableView->setItemDelegateForColumn(4, new MyStyledItemDelegate(tableView));
+    // SalaryDelegate nesnesi, maaş sütununu kırmızıya boyamak için kullanılacaktır
+    SalaryDelegate *salaryDelegate = new SalaryDelegate();
+    tableView->setItemDelegateForColumn(4, salaryDelegate);
 
     // Tabloyu ana pencereye eklenir
     setCentralWidget(tableView);

@@ -23,8 +23,7 @@ struct Personel {
     QString departman;
 };
 
-class MyFilterProxyModel : public QSortFilterProxyModel
-{
+class MyFilterProxyModel : public QSortFilterProxyModel {
 public:
     MyFilterProxyModel(QObject *parent = nullptr)
         : QSortFilterProxyModel(parent)
@@ -52,7 +51,6 @@ protected:
             return !technicalPersonnel; // sadece teknik personel olmayanları göster
         }
     }
-
 private:
     bool m_showTechnicalPersonnel;
 };
@@ -87,23 +85,19 @@ private:
     void toggleAdminPersonnel(bool checked);
 };
 
-class MyStyledItemDelegate : public QStyledItemDelegate {
+class SalaryDelegate : public QStyledItemDelegate {
 public:
-    using QStyledItemDelegate::QStyledItemDelegate;
-
     void paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const override {
-        const QStandardItemModel *model = qobject_cast<const QStandardItemModel *>(index.model());
-        if (model) {
-            int salary = model->data(index, Qt::DisplayRole).toInt();
+        if (index.column() == 4) { // 4: maaş sütununun indeksi
+            int salary = index.data(Qt::DisplayRole).toInt();
             if (salary < 2000) {
                 painter->fillRect(option.rect, Qt::red);
             }
+            painter->drawText(option.rect, Qt::AlignVCenter | Qt::AlignHCenter, QString::number(salary));
+        } else {
+            QStyledItemDelegate::paint(painter, option, index);
         }
-        QStyledItemDelegate::paint(painter, option, index);
     }
 };
-
-
-
 
 #endif // MAINWINDOW_H
