@@ -38,21 +38,42 @@ public:
         }
     }
 
+    void setFilterText(const QString &text)
+    {
+        if (m_filterText != text) {
+            m_filterText = text;
+            invalidateFilter();
+        }
+    }
+
 protected:
     bool filterAcceptsRow(int source_row, const QModelIndex &source_parent) const override
     {
-        QModelIndex index = sourceModel()->index(source_row, 3, source_parent); // 3: teknikPersonel sütununun indeksi
-
-        bool technicalPersonnel = sourceModel()->data(index, Qt::DisplayRole) == "Evet" ? true : false;
-
-        if (m_showTechnicalPersonnel) {
-            return true; // tüm teknik personeli göster
-        } else {
-            return !technicalPersonnel; // sadece teknik personel olmayanları göster
+        // Arama kriteri ile satırı karşılaştır
+        bool match = false;
+        for (int i = 0; i < sourceModel()->columnCount(); ++i) {
+            QModelIndex index = sourceModel()->index(source_row, i, source_parent);
+            QString data = sourceModel()->data(index, Qt::DisplayRole).toString();
+            if (data.contains(m_filterText, Qt::CaseInsensitive)) {
+                match = true;
+                break;
+            }
         }
+        if (!match)
+            return false;
+
+        // Teknik personel gösterimini kontrol et
+        QModelIndex index = sourceModel()->index(source_row, 3, source_parent); // 3: teknikPersonel sütununun indeksi
+        bool technicalPersonnel = sourceModel()->data(index, Qt::DisplayRole) == "Evet" ? true : false;
+        if (!m_showTechnicalPersonnel && technicalPersonnel)
+            return false;
+
+        return true;
     }
+
 private:
     bool m_showTechnicalPersonnel;
+    QString m_filterText;
 };
 
 

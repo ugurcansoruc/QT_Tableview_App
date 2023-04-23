@@ -106,20 +106,7 @@ void MainWindow::createLayout()
 
 void MainWindow::filterTextChanged(const QString& filterText)
 {
-    // Create a regular expression for filtering
-    QRegExp regex(filterText, Qt::CaseInsensitive, QRegExp::RegExp);
-
-    // Set filter regular expression to filter model
-    proxyModel->setFilterRegExp(regex);
-
-    // Set filter key column to all columns of model
-    proxyModel->setFilterKeyColumn(-1);
-
-    // Sort the filtered model
-    proxyModel->sort(0, Qt::AscendingOrder);
-
-    // Clear the filter to reflect the new filter text
-    proxyModel->setFilterRegExp(QRegExp());
+    proxyModel->setFilterText(filterText);
 }
 
 void MainWindow::toggleAdminPersonnel(bool checked)
