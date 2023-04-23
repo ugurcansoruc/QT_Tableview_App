@@ -19,7 +19,7 @@ FORMS += \
     mainwindow.ui
 
 TRANSLATIONS += \
-    Test_tr_CY.ts
+    TableviewApp_tr_CY.ts
 CONFIG += lrelease
 CONFIG += embed_translations
 
